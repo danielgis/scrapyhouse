@@ -185,6 +185,8 @@ def enviar_notificaciones_vivienda(df_filtrado):
         return
 
     print(f"Enviando {len(df_filtrado)} notificaciones...")
+    url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
+    requests.post(url, json={"chat_id": CHAT_ID, "text": "🏠 Nuevo reporte de ofertas inmobiliarias, "parse_mode": "Markdown"})
 
     for index, fila in df_filtrado.iterrows():
         mensaje = (
@@ -194,7 +196,7 @@ def enviar_notificaciones_vivienda(df_filtrado):
             f"🔗 [Abrir en Urbania]({fila['url']})"
         )
         
-        url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
+        
         payload = {
             "chat_id": CHAT_ID,
             "text": mensaje,
