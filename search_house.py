@@ -24,19 +24,15 @@ def iniciar_driver():
     options.add_argument('--disable-dev-shm-usage')
     options.add_argument('--disable-gpu')
     
-    # 1. User Agent real para evitar que detecte "Headless"
-    options.add_argument('--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36')
+    # Localizamos el binario de Chrome preinstalado en GitHub Actions
+    chrome_path = shutil.which("google-chrome") or shutil.which("chrome")
     
-    # 2. Desactivar el flag de automatización que inyecta Chrome
-    options.add_argument('--disable-blink-features=AutomationControlled')
-    
-    driver = uc.Chrome(options=options)
-    
-    # 3. Eliminar rastro de webdriver mediante JavaScript
-    driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
-        "source": "Object.defineProperty(navigator, 'webdriver', {get: () => undefined})"
-    })
-    
+    # Forzamos la versión 145 para que coincida con el error que recibiste
+    driver = uc.Chrome(
+        options=options,
+        browser_executable_path=chrome_path,
+        version_main=145  # <--- Esto soluciona el SessionNotCreatedException
+    )
     return driver
 
 def obtener_puntos_mapa_urbania():
