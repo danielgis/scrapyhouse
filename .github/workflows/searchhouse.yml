@@ -30,7 +30,7 @@ jobs:
         env:
           # Estas variables se jalan de Settings > Secrets > Actions
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-          CHAT_ID: ${{ secrets.CHAT_ID }}
+          TELEGRAM_CHAT_ID: ${{ secrets.CHAT_ID }}
           LATITUDE: ${{ secrets.LATITUDE }}
           LONGITUDE: ${{ secrets.LONGITUDE }}
         run: python search_house.py
