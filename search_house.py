@@ -190,7 +190,7 @@ def enviar_notificaciones_vivienda(df_filtrado):
         mensaje = (
             f"🏠 *¡Oferta detectada cerca a ti!*\n\n"
             f"💰 *Precio:* {fila['price']}\n"
-            f"📍 *A solo:* {fila['distance_to_home']:.2f} km de ti\n"
+            f"📍 *A solo:* {fila['distance_to_home']:.2f} m de ti\n"
             f"🔗 [Abrir en Urbania]({fila['url']})"
         )
         
