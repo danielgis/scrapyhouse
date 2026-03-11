@@ -25,17 +25,25 @@ def iniciar_driver():
     options.add_argument('--disable-dev-shm-usage')
     options.add_argument('--disable-gpu')
     
-    # Localizamos el binario de Chrome preinstalado en GitHub Actions
-    chrome_path = shutil.which("google-chrome") or shutil.which("chrome")
+    # 1. User-Agent de un Chrome real (Windows)
+    options.add_argument('--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36')
     
-    # Forzamos la versión 145 para que coincida con el error que recibiste
+    # 2. Ocultar que es un bot a nivel de protocolo
+    options.add_argument('--disable-blink-features=AutomationControlled')
+    
+    chrome_path = shutil.which("google-chrome") or shutil.which("chrome")
     driver = uc.Chrome(
         options=options,
         browser_executable_path=chrome_path,
-        version_main=145  # <--- Esto soluciona el SessionNotCreatedException
+        version_main=145 
     )
+    
+    # 3. Eliminar el rastro de 'navigator.webdriver'
+    driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
+        "source": "Object.defineProperty(navigator, 'webdriver', {get: () => undefined})"
+    })
+    
     return driver
-
 def obtener_puntos_mapa_urbania():
     # options = uc.ChromeOptions()
     driver = iniciar_driver()
